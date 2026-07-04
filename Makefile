@@ -1,3 +1,7 @@
+.PHONY: init
+init:
+	mkdir -p storage/gitea storage/registry storage/athens
+
 .PHONY: up
 up:
 	docker compose up -d

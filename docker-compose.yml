@@ -27,12 +27,10 @@ services:
     image: gomods/athens:v0.18.0
     container_name: athens-proxy
     restart: always
-    user: "1000:1000"
     environment:
       ATHENS_DISK_STORAGE_ROOT: /var/lib/athens
       ATHENS_STORAGE_TYPE: disk
     volumes:
       - ./storage/athens:/var/lib/athens
-      - ./gitconfig/.gitconfig:/home/athens/.gitconfig:ro
     ports:
       - "3001:3000"
