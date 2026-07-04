@@ -5,3 +5,7 @@ up:
 .PHONY: down
 down:
 	docker compose down
+
+.PHONY: ps
+ps:
+	docker compose ps
