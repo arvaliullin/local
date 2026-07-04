@@ -17,6 +17,41 @@ docker pull registry:3.1.1
 docker pull gomods/athens:v0.18.0
 ```
 
+## Docker save
+
+Для переноса на другую машину без интернета достаточно сохранить образ registry - остальные образы уже лежат в `storage/registry/` и будут доступны после его запуска.
+
+```sh
+docker save -o registry-3.1.1.tar registry:3.1.1
+```
+
+Скопируй на внешний диск вместе с каталогом проекта, включая `storage/`.
+
+## Docker load
+
+На чистой системе с установленным Docker:
+
+```sh
+docker load -i registry-3.1.1.tar
+```
+
+## Bootstrap без интернета
+
+```sh
+docker load -i registry-3.1.1.tar
+docker compose up -d registry
+
+docker pull localhost:3003/gitea:1.26.4
+docker pull localhost:3003/athens:v0.18.0
+
+docker tag localhost:3003/gitea:1.26.4 docker.gitea.com/gitea:1.26.4
+docker tag localhost:3003/athens:v0.18.0 gomods/athens:v0.18.0
+
+docker compose up -d
+```
+
+Не запускай сразу `make up` без интернета - compose попытается скачать gitea и athens из интернета. Сначала подними registry, вытащи образы из него, перетегируй и только потом поднимай все сервисы.
+
 ## Теги для локального registry
 
 ```sh
