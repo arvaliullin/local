@@ -1,0 +1,4 @@
+# Add Git configuration for Athens here when needed.
+# Example:
+# [url "http://gitea:3000/"]
+# 	insteadOf = https://example.com/
