@@ -21,8 +21,18 @@ docker pull gomods/athens:v0.18.0
 
 Для переноса на другую машину без интернета достаточно сохранить образ registry - остальные образы уже лежат в `storage/registry/` и будут доступны после его запуска.
 
+Минимальный вариант:
+
 ```sh
 docker save -o registry-3.1.1.tar registry:3.1.1
+```
+
+Все образы по отдельности:
+
+```sh
+docker save -o registry-3.1.1.tar registry:3.1.1
+docker save -o gitea-1.26.4.tar docker.gitea.com/gitea:1.26.4
+docker save -o athens-v0.18.0.tar gomods/athens:v0.18.0
 ```
 
 Скопируй на внешний диск вместе с каталогом проекта, включая `storage/`.
@@ -33,6 +43,14 @@ docker save -o registry-3.1.1.tar registry:3.1.1
 
 ```sh
 docker load -i registry-3.1.1.tar
+```
+
+Если сохранял образы по отдельности:
+
+```sh
+docker load -i registry-3.1.1.tar
+docker load -i gitea-1.26.4.tar
+docker load -i athens-v0.18.0.tar
 ```
 
 ## Bootstrap без интернета
