@@ -1,0 +1,4 @@
+runner:
+  capacity: 1
+container:
+  options: "--cpus=4 --memory=8g --memory-swap=8g --add-host=disglair.local:host-gateway"

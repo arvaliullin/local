@@ -13,6 +13,17 @@ services:
     ports:
       - "3002:3000"
       - "2222:22"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
 
   registry:
     image: registry:3.1.1
@@ -22,6 +33,11 @@ services:
       - ./storage/registry:/var/lib/registry
     ports:
       - "3003:5000"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
 
   athens:
     image: gomods/athens:v0.18.0
@@ -34,3 +50,34 @@ services:
       - ./storage/athens:/var/lib/athens
     ports:
       - "3001:3000"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 1G
+
+  runner:
+    image: docker.io/gitea/runner:3
+    container_name: gitea-runner
+    restart: always
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: http://disglair.local:3002/
+      GITEA_RUNNER_REGISTRATION_TOKEN: ${GITEA_RUNNER_REGISTRATION_TOKEN}
+    extra_hosts:
+      - "disglair.local:host-gateway"
+    volumes:
+      - ./config.yaml:/config.yaml:ro
+      - runner_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      gitea:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 512M
+
+volumes:
+  runner_data:
