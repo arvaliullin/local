@@ -29,6 +29,8 @@ services:
     image: registry:3.1.1
     container_name: registry
     restart: always
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: "true"
     volumes:
       - ./storage/registry:/var/lib/registry
     ports:
