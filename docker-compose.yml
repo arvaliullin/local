@@ -41,6 +41,25 @@ services:
           cpus: "1"
           memory: 512M
 
+  registry-ui:
+    image: joxit/docker-registry-ui:2.6.0
+    container_name: registry-ui
+    restart: always
+    environment:
+      REGISTRY_TITLE: Local Registry
+      NGINX_PROXY_PASS_URL: http://registry:5000
+      SINGLE_REGISTRY: "true"
+      DELETE_IMAGES: "true"
+    ports:
+      - "3004:80"
+    depends_on:
+      - registry
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 128M
+
   athens:
     image: gomods/athens:v0.18.0
     container_name: athens-proxy

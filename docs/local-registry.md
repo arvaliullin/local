@@ -14,6 +14,7 @@ docker compose up -d registry
 ```sh
 docker pull docker.gitea.com/gitea:1.26.4
 docker pull registry:3.1.1
+docker pull joxit/docker-registry-ui:2.6.0
 docker pull gomods/athens:v0.18.0
 ```
 
@@ -31,6 +32,7 @@ docker save -o registry-3.1.1.tar registry:3.1.1
 
 ```sh
 docker save -o registry-3.1.1.tar registry:3.1.1
+docker save -o registry-ui-2.6.0.tar joxit/docker-registry-ui:2.6.0
 docker save -o gitea-1.26.4.tar docker.gitea.com/gitea:1.26.4
 docker save -o athens-v0.18.0.tar gomods/athens:v0.18.0
 ```
@@ -49,6 +51,7 @@ docker load -i registry-3.1.1.tar
 
 ```sh
 docker load -i registry-3.1.1.tar
+docker load -i registry-ui-2.6.0.tar
 docker load -i gitea-1.26.4.tar
 docker load -i athens-v0.18.0.tar
 ```
@@ -60,21 +63,24 @@ docker load -i registry-3.1.1.tar
 docker compose up -d registry
 
 docker pull localhost:3003/gitea:1.26.4
+docker pull localhost:3003/registry-ui:2.6.0
 docker pull localhost:3003/athens:v0.18.0
 
 docker tag localhost:3003/gitea:1.26.4 docker.gitea.com/gitea:1.26.4
+docker tag localhost:3003/registry-ui:2.6.0 joxit/docker-registry-ui:2.6.0
 docker tag localhost:3003/athens:v0.18.0 gomods/athens:v0.18.0
 
 docker compose up -d
 ```
 
-Не запускай сразу `make up` без интернета - compose попытается скачать gitea и athens из интернета. Сначала подними registry, вытащи образы из него, перетегируй и только потом поднимай все сервисы.
+Не запускай сразу `make up` без интернета - compose попытается скачать gitea, registry-ui и athens из интернета. Сначала подними registry, вытащи образы из него, перетегируй и только потом поднимай все сервисы.
 
 ## Теги для локального registry
 
 ```sh
 docker tag docker.gitea.com/gitea:1.26.4 localhost:3003/gitea:1.26.4
 docker tag registry:3.1.1 localhost:3003/registry:3.1.1
+docker tag joxit/docker-registry-ui:2.6.0 localhost:3003/registry-ui:2.6.0
 docker tag gomods/athens:v0.18.0 localhost:3003/athens:v0.18.0
 ```
 
@@ -83,6 +89,7 @@ docker tag gomods/athens:v0.18.0 localhost:3003/athens:v0.18.0
 ```sh
 docker push localhost:3003/gitea:1.26.4
 docker push localhost:3003/registry:3.1.1
+docker push localhost:3003/registry-ui:2.6.0
 docker push localhost:3003/athens:v0.18.0
 ```
 
@@ -92,6 +99,7 @@ docker push localhost:3003/athens:v0.18.0
 curl http://localhost:3003/v2/_catalog
 curl http://localhost:3003/v2/gitea/tags/list
 curl http://localhost:3003/v2/registry/tags/list
+curl http://localhost:3003/v2/registry-ui/tags/list
 curl http://localhost:3003/v2/athens/tags/list
 ```
 
